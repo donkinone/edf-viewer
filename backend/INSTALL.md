@@ -1,4 +1,4 @@
-# Java后端安装指南
+# 后端安装指南
 
 ## 系统要求
 
@@ -61,11 +61,8 @@ mvn -version
 # 进入backend目录
 cd backend
 
-# 编译项目
-mvn clean compile
-
-# 启动服务
-mvn spring-boot:run
+# 运行启动脚本
+./start.sh
 ```
 
 ## 故障排除
@@ -83,26 +80,3 @@ mvn spring-boot:run
 3. **编译错误**
    - 检查Java版本是否为11+
    - 确保网络连接正常（Maven需要下载依赖）
-
-## 替代方案
-
-如果无法安装Java/Maven，可以：
-
-1. 使用Docker运行Java应用
-2. 使用在线IDE（如GitPod、CodeSandbox）
-3. 仅使用前端部分，手动创建测试数据
-
-## 快速测试
-
-如果只想测试前端功能，可以：
-
-1. 直接打开 `public/index.html`
-2. 修改 `script.js` 中的API地址为模拟数据
-3. 或使用提供的测试数据
-
-## 联系支持
-
-如果遇到安装问题，请：
-1. 检查系统版本兼容性
-2. 查看错误日志
-3. 搜索相关错误信息 

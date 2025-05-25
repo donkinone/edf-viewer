@@ -11,9 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const progressContainer = document.querySelector('.upload-progress-container');
   const resultsSection = document.getElementById('resultsSection');
   const resultsContainer = document.getElementById('resultsContainer');
-  const errorModal = document.getElementById('errorModal');
-  const errorMessage = document.getElementById('errorMessage');
-  const errorClose = document.getElementById('errorClose');
+
   const selectedFilesContainer = document.getElementById('selectedFiles');
 
   // 存储选择的文件
@@ -144,8 +142,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 显示错误信息
   const displayError = (message) => {
-    errorMessage.textContent = message;
-    errorModal.style.display = 'flex';
+    console.error('错误:', message);
+    alert(message); // 使用简单的alert替代模态框
   };
 
   // 上传文件函数
@@ -293,7 +291,6 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const chartPanel = document.createElement('div');
       chartPanel.className = 'chart-panel';
-      chartPanel.innerHTML = `<h3>EEG波形图</h3>`;
       
       const chartContainer = document.createElement('div');
       chartContainer.className = 'chart-container';
@@ -389,25 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
       channelCount: validChannels.length
     });
     
-    // 添加控制面板
-    const controlPanel = document.createElement('div');
-    controlPanel.className = 'eeg-control-panel';
-    // 构建采样信息
-    const samplingInfo = firstChannel.samplingStep > 1 ? 
-      ` (采样: 1:${firstChannel.samplingStep})` : '';
-    
-    controlPanel.innerHTML = `
-      <div class="eeg-info">
-        <span>文件: ${data.fileName}</span>
-        <span>显示范围: ${formatTimeFromSeconds(actualStartTime)} - ${formatTimeFromSeconds(actualEndTime)}</span>
-        <span>显示时长: ${actualDisplayMinutes.toFixed(2)}分钟 (初始最小视图)</span>
-        <span>总时长: ${(totalDuration / 60).toFixed(2)}分钟</span>
-        <span>采样率: ${sampleRate}Hz${samplingInfo}</span>
-        <span>显示数据点: ${displayDataPoints.toLocaleString()} / ${totalDataPoints.toLocaleString()}</span>
-        <span>通道数: ${validChannels.length}</span>
-      </div>
-    `;
-    waveformContainer.appendChild(controlPanel);
+
 
     // 添加通道信息表格
     const channelInfoSection = document.createElement('div');
@@ -475,12 +454,9 @@ document.addEventListener('DOMContentLoaded', () => {
     interactionHints.innerHTML = `
       <strong>💡 交互操作指南：</strong>
       <ul>
-        <li><strong>🔄 同步操作：</strong>所有通道的缩放和拖动完全同步，便于对比分析不同通道的信号特征</li>
         <li><strong>拖动平移：</strong>在任意波形图上按住鼠标左键并拖动，所有通道同步左右移动查看不同时间段</li>
         <li><strong>滚轮缩放：</strong>在任意波形图上滚动鼠标滚轮，所有通道同步放大或缩小时间窗口（以鼠标位置为中心）</li>
         <li><strong>双击重置：</strong>双击任意波形图，所有通道同步重置到初始的最小视图</li>
-        <li><strong>滚动条：</strong>最后一个通道底部的蓝色滚动条显示当前查看的数据在整个文件中的位置</li>
-        <li><strong>通道信息：</strong>下方表格显示所有通道的详细统计信息</li>
         ${samplingHint}
       </ul>
     `;
@@ -1108,17 +1084,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 清除按钮点击
   clearButton.addEventListener('click', clearSelectedFiles);
 
-  // 关闭错误模态框
-  errorClose.addEventListener('click', () => {
-    errorModal.style.display = 'none';
-  });
 
-  // 点击模态框背景关闭
-  errorModal.addEventListener('click', (e) => {
-    if (e.target === errorModal) {
-      errorModal.style.display = 'none';
-    }
-  });
 
   // 初始化按钮状态
   updateButtons();
