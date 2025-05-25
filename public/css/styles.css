@@ -1,0 +1,959 @@
+/* 基本样式和重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #4a6baf;
+  --primary-hover: #3a549a;
+  --secondary-color: #f0f4ff;
+  --accent-color: #3cc0b5;
+  --text-color: #333;
+  --light-gray: #f5f5f5;
+  --gray: #ccc;
+  --dark-gray: #666;
+  --error-color: #e74c3c;
+  --success-color: #2ecc71;
+  --border-radius: 8px;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: #f9fafc;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* 头部样式 */
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+h1 {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--dark-gray);
+  font-size: 1.1rem;
+}
+
+/* 主内容区样式 */
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* 上传区域样式 */
+.upload-section {
+  background-color: white;
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.upload-area {
+  border: 2px dashed var(--gray);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.upload-area:hover, .upload-area.drag-over {
+  border-color: var(--primary-color);
+  background-color: var(--secondary-color);
+}
+
+.upload-icon {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.upload-area h2 {
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.upload-area p {
+  color: var(--dark-gray);
+  margin-bottom: 1rem;
+}
+
+/* 文件输入和按钮样式 */
+.file-input {
+  display: none;
+}
+
+.button {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: bold;
+  transition: var(--transition);
+}
+
+.button:hover {
+  background-color: var(--primary-hover);
+}
+
+.button:disabled {
+  background-color: var(--gray);
+  cursor: not-allowed;
+}
+
+.button-secondary {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.button-secondary:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.upload-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* 已选文件列表样式 */
+.selected-files {
+  margin-top: 1.5rem;
+}
+
+.selected-files h3 {
+  color: var(--dark-gray);
+  margin-bottom: 0.5rem;
+}
+
+.selected-files-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.selected-file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--secondary-color);
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+}
+
+.selected-file-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.file-icon {
+  color: var(--primary-color);
+}
+
+.file-name {
+  font-weight: 500;
+}
+
+.file-size {
+  color: var(--dark-gray);
+  font-size: 0.9rem;
+}
+
+.remove-file {
+  color: var(--dark-gray);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.remove-file:hover {
+  color: var(--error-color);
+}
+
+/* 上传进度样式 */
+.upload-progress-container {
+  margin-top: 1.5rem;
+  display: none;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background-color: var(--light-gray);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--accent-color);
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  text-align: center;
+  margin-top: 0.5rem;
+  color: var(--dark-gray);
+}
+
+/* 结果区域样式 */
+.results-section {
+  display: none;
+}
+
+.results-section h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+}
+
+/* 结果卡片样式 - 重新设计为左右结构 */
+.result-card {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  min-height: 500px;
+}
+
+/* 左侧信息面板 */
+.info-panel {
+  flex: 0 0 30%;
+  padding: 1.5rem;
+  border-right: 1px solid var(--light-gray);
+  overflow-y: auto;
+  max-height: 800px;
+}
+
+/* 文件信息 */
+.file-info {
+  border-bottom: 1px solid var(--light-gray);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.file-info h3 {
+  color: var(--primary-color);
+  margin-bottom: 0.25rem;
+  word-break: break-word;
+}
+
+/* 信息表格 */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+.info-table th, 
+.info-table td {
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.info-table th {
+  color: var(--dark-gray);
+  font-weight: 500;
+  width: 40%;
+}
+
+/* 通道列表 */
+.channels-list {
+  margin-top: 1rem;
+}
+
+.channels-list h4 {
+  margin-bottom: 0.75rem;
+  color: var(--dark-gray);
+}
+
+/* 通道选择区域 */
+.channel-selection-area {
+  margin: 20px 0;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.channel-selection-area h4 {
+  margin: 0 0 10px 0;
+  color: #495057;
+  font-size: 16px;
+}
+
+.channel-select {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.channel-button {
+  padding: 6px 12px;
+  border: 2px solid #dee2e6;
+  background: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  color: #495057;
+}
+
+.channel-button:hover {
+  border-color: #3cc0b5;
+  background: #f0fffe;
+}
+
+.channel-button.active {
+  background: #3cc0b5;
+  border-color: #3cc0b5;
+  color: white;
+}
+
+.show-all-button, .clear-all-button {
+  padding: 6px 12px;
+  margin-right: 10px;
+  border: 1px solid #dee2e6;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.show-all-button:hover {
+  background: #e7f3ff;
+  border-color: #007bff;
+}
+
+.clear-all-button:hover {
+  background: #fff5f5;
+  border-color: #dc3545;
+}
+
+/* 多通道容器样式 */
+.multi-channel-container {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+}
+
+/* 控制面板 */
+.control-panel {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #e9ecef;
+}
+
+.metadata-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-size: 14px;
+  color: #495057;
+}
+
+.metadata-info > div {
+  background: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+}
+
+/* 缩放控制 */
+.zoom-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.zoom-in-button,
+.zoom-out-button,
+.reset-zoom-button {
+  background-color: white;
+  border: 1px solid var(--primary-color);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.zoom-in-button:hover,
+.zoom-out-button:hover,
+.reset-zoom-button:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* 时间范围信息 */
+.time-range-info {
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+}
+
+/* 通道包装器 */
+.channel-wrapper {
+  border-bottom: 1px solid #e9ecef;
+  background: white;
+}
+
+.channel-wrapper:last-child {
+  border-bottom: none;
+}
+
+/* 通道标签容器 */
+.channel-label-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.channel-label {
+  font-weight: 600;
+  color: #495057;
+  font-size: 14px;
+}
+
+.channel-duration {
+  font-size: 12px;
+  color: #6c757d;
+  background: #e9ecef;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+/* 波形容器 */
+.waveform-container {
+  padding: 10px;
+  background: white;
+}
+
+.channel-chart {
+  width: 100%;
+  height: 150px;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  background: white;
+  cursor: grab;
+}
+
+.channel-chart:active {
+  cursor: grabbing;
+}
+
+/* SVG样式 */
+.svg-container {
+  width: 100%;
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.channel-label {
+  font-size: 12px;
+  fill: #495057;
+  font-weight: 500;
+}
+
+.channel-separator {
+  stroke: #e9ecef;
+  stroke-width: 1;
+}
+
+.waveform-path {
+  stroke-width: 1.5;
+  fill: none;
+}
+
+/* 图表控制 */
+.chart-controls {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #e9ecef;
+}
+
+.time-controls, .amplitude-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.time-controls label, .amplitude-controls label {
+  font-size: 14px;
+  color: #495057;
+  font-weight: 500;
+  min-width: 80px;
+}
+
+.time-controls input[type="range"], .amplitude-controls input[type="range"] {
+  width: 200px;
+  height: 6px;
+  border-radius: 3px;
+  background: #dee2e6;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.time-controls input[type="range"]::-webkit-slider-thumb,
+.amplitude-controls input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #3cc0b5;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.time-controls input[type="range"]::-moz-range-thumb,
+.amplitude-controls input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #3cc0b5;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+#timeDisplay, #amplitudeDisplay {
+  font-size: 13px;
+  color: #495057;
+  background: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+  min-width: 100px;
+  text-align: center;
+}
+
+/* 响应式设计 */
+@media (max-width: 900px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .result-card {
+    flex-direction: column;
+  }
+  
+  .info-panel {
+    flex: none;
+    width: 100%;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid var(--light-gray);
+  }
+  
+  .chart-panel {
+    max-height: none;
+  }
+  
+  .upload-actions {
+    flex-direction: column;
+  }
+  
+  .button {
+    width: 100%;
+  }
+}
+
+/* 通道信息区域 */
+.channel-info-section {
+  margin: 20px 0;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid #dee2e6;
+}
+
+/* 通道表格样式 */
+.channel-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: white;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.channel-table thead {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.channel-table th,
+.channel-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--light-gray);
+  font-size: 0.9rem;
+}
+
+.channel-table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.channel-table tbody tr:hover {
+  background-color: rgba(60, 192, 181, 0.1);
+}
+
+.channel-table tbody tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.channel-table tbody tr:nth-child(even):hover {
+  background-color: rgba(60, 192, 181, 0.15);
+}
+
+.channel-table td:first-child {
+  font-weight: 600;
+  color: var(--primary-color);
+  text-align: center;
+  width: 60px;
+}
+
+/* 响应式表格 */
+@media (max-width: 768px) {
+  .channel-table {
+    font-size: 0.8rem;
+  }
+  
+  .channel-table th,
+  .channel-table td {
+    padding: 0.5rem 0.25rem;
+  }
+  
+  .channel-table th {
+    font-size: 0.7rem;
+  }
+  
+  .chart-controls {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .time-controls, .amplitude-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .time-controls input[type="range"], .amplitude-controls input[type="range"] {
+    width: 150px;
+  }
+  
+  .channel-select {
+    gap: 6px;
+  }
+  
+  .channel-button {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+  
+  .metadata-info {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* EEG波形显示容器 */
+.eeg-waveform-container {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+/* EEG通道容器 */
+.eeg-channel-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+.eeg-channel-container:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+/* EEG通道标签 */
+.eeg-channel-label {
+  width: 120px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+  text-align: right;
+  padding-right: 15px;
+  flex-shrink: 0;
+}
+
+/* EEG通道画布 */
+.eeg-channel-canvas {
+  border: 1px solid #e0e0e0;
+  background: white;
+  cursor: grab;
+  transition: cursor 0.2s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.eeg-channel-canvas:active {
+  cursor: grabbing;
+}
+
+.eeg-channel-canvas:hover {
+  border-color: #2196F3;
+  box-shadow: 0 0 5px rgba(33, 150, 243, 0.3);
+}
+
+
+
+/* 无数据消息 */
+.no-data-message {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  padding: 40px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+/* EEG控制面板 */
+.eeg-control-panel {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.eeg-info {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.eeg-info span {
+  background: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+  font-size: 12px;
+  color: #495057;
+}
+
+.eeg-navigation {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.eeg-navigation button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.2s;
+}
+
+.eeg-navigation button:hover:not(:disabled) {
+  background: #0056b3;
+}
+
+.eeg-navigation button:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.eeg-navigation span {
+  font-size: 12px;
+  color: #495057;
+  background: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+}
+
+/* 拖动提示样式 */
+.canvas-drag-tip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1000;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(10px); }
+  20% { opacity: 1; transform: translateY(0); }
+  80% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
+/* 滚动条指示器样式增强 */
+.canvas-scroll-indicator {
+  position: relative;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.canvas-scroll-thumb {
+  background: linear-gradient(90deg, rgba(33, 150, 243, 0.6), rgba(33, 150, 243, 0.8));
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.canvas-scroll-thumb:hover {
+  background: linear-gradient(90deg, rgba(33, 150, 243, 0.8), rgba(33, 150, 243, 1));
+}
+
+/* 交互提示文本 */
+.interaction-hints {
+  background: #e3f2fd;
+  border: 1px solid #bbdefb;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 10px 0;
+  font-size: 12px;
+  color: #1565c0;
+}
+
+.interaction-hints ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.interaction-hints li {
+  margin: 4px 0;
+}
+
+/* 数据窗口信息显示 */
+.data-window-info {
+  background: rgba(33, 150, 243, 0.1);
+  border: 1px solid rgba(33, 150, 243, 0.3);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 11px;
+  color: #1565c0;
+  display: inline-block;
+  margin: 5px 0;
+}
+
+/* 缩放级别指示器 */
+.zoom-level-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.zoom-level-indicator.visible {
+  opacity: 1;
+}
+
+/* 响应式设计增强 */
+@media (max-width: 768px) {
+  .eeg-control-panel {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 15px;
+  }
+  
+  .eeg-info {
+    justify-content: center;
+  }
+  
+  .eeg-navigation {
+    justify-content: center;
+  }
+  
+  .eeg-channel-canvas {
+    width: 100% !important;
+    max-width: 100%;
+  }
+  
+  .interaction-hints {
+    font-size: 11px;
+    padding: 10px;
+  }
+} 

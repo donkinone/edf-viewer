@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDF文件查看器 - 演示版</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .demo-banner {
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #856404;
+    }
+    .demo-banner strong {
+      color: #d63031;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>EDF文件查看器 - 演示版</h1>
+      <p class="subtitle">上传并查看EDF(European Data Format)文件信息</p>
+      
+      <div class="demo-banner">
+        <strong>演示模式</strong> - 此版本使用模拟数据展示功能，无需Java后端。
+        <br>点击"上传文件"按钮即可查看演示结果。
+      </div>
+    </header>
+
+    <main>
+      <section class="upload-section">
+        <div class="upload-area" id="dropZone">
+          <div class="upload-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48">
+              <path d="M12 16l-5-5h3V4h4v7h3l-5 5z" fill="currentColor"/>
+              <path d="M4 18h16v2H4z" fill="currentColor"/>
+            </svg>
+          </div>
+          <h2>拖放EDF文件到此处</h2>
+          <p>或者</p>
+          <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="fileInput" name="edfFiles" accept=".edf" multiple class="file-input">
+            <div class="upload-actions">
+              <label for="fileInput" class="button">选择文件</label>
+              <button type="button" id="uploadButton" class="button">上传文件（演示）</button>
+              <button type="button" id="clearButton" class="button button-secondary">清除所有</button>
+            </div>
+          </form>
+        </div>
+        
+        <div class="selected-files" id="selectedFiles" style="display: none;">
+          <h3>已选择的文件：</h3>
+          <ul class="selected-files-list" id="selectedFilesList"></ul>
+        </div>
+        
+        <div class="upload-progress-container">
+          <div class="progress-bar">
+            <div class="progress-bar-fill" id="progressBar"></div>
+          </div>
+          <div class="progress-text" id="progressText"></div>
+        </div>
+      </section>
+      
+      <section class="results-section" id="resultsSection">
+        <h2>EDF文件分析结果</h2>
+        <div class="results-container" id="resultsContainer"></div>
+      </section>
+    </main>
+  </div>
+  
+  <!-- 错误模态框 -->
+  <div class="error-modal" id="errorModal">
+    <div class="error-content">
+      <div class="error-icon">⚠️</div>
+      <div class="error-message" id="errorMessage"></div>
+      <button class="error-close" id="errorClose">关闭</button>
+    </div>
+  </div>
+
+  <script src="js/demo-data.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    // 覆盖上传函数以使用演示数据
+    const originalUploadFiles = uploadFiles;
+    
+    // 重新定义上传函数为演示模式
+    window.uploadFiles = async () => {
+      // 显示进度条
+      progressContainer.style.display = 'block';
+      uploadButton.disabled = true;
+      clearButton.disabled = true;
+      
+      // 模拟上传进度
+      let progress = 0;
+      const progressInterval = setInterval(() => {
+        progress += 10;
+        progressBar.style.width = `${progress}%`;
+        progressText.textContent = `上传中... ${progress}%`;
+        
+        if (progress >= 100) {
+          clearInterval(progressInterval);
+          progressText.textContent = '处理完成!';
+          
+          // 显示演示数据
+          setTimeout(() => {
+            const response = simulateApiResponse();
+            displayResults(response.data);
+            clearSelectedFiles();
+            
+            // 重置按钮状态
+            uploadButton.disabled = false;
+            clearButton.disabled = false;
+            
+            // 隐藏进度条
+            setTimeout(() => {
+              progressContainer.style.display = 'none';
+              progressBar.style.width = '0';
+              progressText.textContent = '';
+            }, 2000);
+          }, 500);
+        }
+      }, 200);
+    };
+    
+    // 自动启用上传按钮（演示模式）
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        uploadButton.disabled = false;
+      }, 100);
+    });
+  </script>
+</body>
+</html> 

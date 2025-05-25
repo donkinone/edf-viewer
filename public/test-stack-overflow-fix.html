@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>堆栈溢出修复验证</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .test-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .fix-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .fix-title {
+            color: #e74c3c;
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ffebee;
+            padding-bottom: 10px;
+        }
+        
+        .fix-details {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .fix-details h3 {
+            color: #721c24;
+            margin-bottom: 10px;
+        }
+        
+        .fix-details ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .fix-details li {
+            margin: 8px 0;
+            color: #721c24;
+        }
+        
+        .solution-info {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .solution-info h3 {
+            color: #155724;
+            margin-bottom: 10px;
+        }
+        
+        .solution-info ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .solution-info li {
+            margin: 8px 0;
+            color: #155724;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+        
+        .test-badge {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <header>
+            <h1>🚨 堆栈溢出修复验证</h1>
+            <div class="test-badge">错误修复版本</div>
+            <p class="subtitle">解决 "maximum call stack size exceeded" 错误</p>
+        </header>
+
+        <div class="fix-section">
+            <h2 class="fix-title">🔍 问题分析</h2>
+            
+            <div class="fix-details">
+                <h3>❌ 错误现象：</h3>
+                <ul>
+                    <li><strong>错误信息：</strong>"解析服务器响应时出错：maximum call stack size exceeded"</li>
+                    <li><strong>发生位置：</strong>前端 JSON.parse() 解析服务器响应时</li>
+                    <li><strong>触发条件：</strong>上传大型EDF文件时</li>
+                    <li><strong>根本原因：</strong>Java后端传输了过多的数据点，导致JSON序列化堆栈溢出</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                <strong>错误堆栈示例：</strong><br>
+                RangeError: Maximum call stack size exceeded<br>
+                &nbsp;&nbsp;at JSON.parse (&lt;anonymous&gt;)<br>
+                &nbsp;&nbsp;at XMLHttpRequest.xhr.onload (script.js:190:32)
+            </div>
+        </div>
+
+        <div class="fix-section">
+            <h2 class="fix-title">🛠️ 修复方案</h2>
+            
+            <div class="solution-info">
+                <h3>✅ 后端修复（EdfParserService.java）：</h3>
+                <ul>
+                    <li><strong>数据量限制：</strong>最多传输100,000个数据点</li>
+                    <li><strong>智能采样：</strong>对大文件进行降采样，保留关键特征</li>
+                    <li><strong>采样算法：</strong>step = max(1, totalDataPoints / 100000)</li>
+                    <li><strong>元数据保留：</strong>记录原始数据点数、采样数据点数、采样步长</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                <strong>修复代码片段：</strong><br>
+                // 限制传输的数据量以避免JSON序列化堆栈溢出<br>
+                int maxDataPoints = 100000;<br>
+                int totalDataPoints = channelData.length;<br>
+                int step = Math.max(1, totalDataPoints / maxDataPoints);<br>
+                <br>
+                // 智能采样：保留关键数据点<br>
+                for (int j = 0; j < totalDataPoints; j += step) {<br>
+                &nbsp;&nbsp;allDataPoints.add(channelData[j]);<br>
+                &nbsp;&nbsp;// ...<br>
+                }
+            </div>
+
+            <div class="solution-info">
+                <h3>✅ 前端适配（script.js）：</h3>
+                <ul>
+                    <li><strong>采样信息显示：</strong>在通道表格中显示采样比例</li>
+                    <li><strong>用户提示：</strong>在交互指南中说明数据采样</li>
+                    <li><strong>日志增强：</strong>显示采样步长和数据点统计</li>
+                    <li><strong>向下兼容：</strong>支持未采样的小文件</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="fix-section">
+            <h2 class="fix-title">📊 修复效果对比</h2>
+            
+            <div class="code-block">
+                <strong>修复前：</strong><br>
+                - 大文件（如1GB EDF）：传输数百万数据点<br>
+                - JSON序列化：堆栈溢出，解析失败<br>
+                - 用户体验：上传失败，错误提示<br>
+                <br>
+                <strong>修复后：</strong><br>
+                - 大文件（如1GB EDF）：最多传输100,000数据点<br>
+                - JSON序列化：正常完成，快速解析<br>
+                - 用户体验：上传成功，显示采样信息<br>
+                - 数据质量：保留关键特征，支持完整交互
+            </div>
+        </div>
+
+        <div class="fix-section">
+            <h2 class="fix-title">🧪 测试验证步骤</h2>
+            
+            <div class="interaction-hints">
+                <strong>💡 请按以下步骤验证修复效果：</strong>
+                <ol>
+                    <li><strong>启动后端：</strong>
+                        <code>cd backend && mvn spring-boot:run</code>
+                    </li>
+                    <li><strong>启动前端：</strong>
+                        <code>./start-frontend.sh</code>
+                    </li>
+                    <li><strong>访问应用：</strong>
+                        <a href="http://localhost:3000" target="_blank">http://localhost:3000</a>
+                    </li>
+                    <li><strong>上传大文件：</strong>
+                        <ul>
+                            <li>选择较大的EDF文件（>10MB）</li>
+                            <li>观察是否出现堆栈溢出错误</li>
+                            <li>检查是否显示采样信息</li>
+                        </ul>
+                    </li>
+                    <li><strong>验证功能：</strong>
+                        <ul>
+                            <li>波形图正常显示</li>
+                            <li>拖动和缩放功能正常</li>
+                            <li>通道表格显示采样比例</li>
+                            <li>交互提示包含采样说明</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="fix-section">
+            <h2 class="fix-title">📈 性能优化</h2>
+            
+            <div class="solution-info">
+                <h3>✅ 优化效果：</h3>
+                <ul>
+                    <li><strong>传输速度：</strong>大幅减少网络传输时间</li>
+                    <li><strong>内存使用：</strong>降低前端内存占用</li>
+                    <li><strong>解析速度：</strong>JSON解析更快</li>
+                    <li><strong>渲染性能：</strong>Canvas绘制更流畅</li>
+                    <li><strong>用户体验：</strong>支持更大的EDF文件</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                <strong>性能数据示例：</strong><br>
+                文件大小: 500MB EDF<br>
+                原始数据点: 2,000,000 点/通道<br>
+                采样后数据点: 100,000 点/通道<br>
+                采样比例: 1:20<br>
+                传输减少: 95%<br>
+                解析时间: 从失败到 &lt;1秒
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚨 堆栈溢出修复验证页面已加载');
+            console.log('修复要点：');
+            console.log('1. 后端限制传输数据量（最多100,000点）');
+            console.log('2. 智能采样算法保留关键特征');
+            console.log('3. 前端适配显示采样信息');
+            console.log('4. 向下兼容小文件');
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通道同步功能验证</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .test-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .sync-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sync-title {
+            color: #2196F3;
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e3f2fd;
+            padding-bottom: 10px;
+        }
+        
+        .sync-features {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .sync-features h3 {
+            color: #1565c0;
+            margin-bottom: 10px;
+        }
+        
+        .sync-features ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .sync-features li {
+            margin: 8px 0;
+            color: #1565c0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .comparison-table th {
+            background: #2196F3;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .sync-badge {
+            background: linear-gradient(45deg, #2196F3, #21CBF3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        
+        .demo-video {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <header>
+            <h1>🔄 通道同步功能验证</h1>
+            <div class="sync-badge">v1.3 - 全通道同步版</div>
+            <p class="subtitle">所有EEG通道的缩放和拖动完全同步，便于对比分析</p>
+        </header>
+
+        <div class="sync-section">
+            <h2 class="sync-title">🎯 同步功能特性</h2>
+            
+            <div class="sync-features">
+                <h3>✅ 核心同步功能：</h3>
+                <ul>
+                    <li><strong>🔄 全局同步状态：</strong>所有通道共享同一个时间窗口和缩放级别</li>
+                    <li><strong>🖱️ 统一拖动：</strong>在任意通道拖动，所有通道同步移动</li>
+                    <li><strong>🔍 统一缩放：</strong>在任意通道滚轮缩放，所有通道同步缩放</li>
+                    <li><strong>🎯 智能中心点：</strong>缩放以鼠标位置为中心，保持视觉连续性</li>
+                    <li><strong>🔄 统一重置：</strong>双击任意通道，所有通道同步重置</li>
+                    <li><strong>📊 单一滚动条：</strong>最后一个通道显示全局滚动条指示器</li>
+                    <li><strong>⚡ 单一缩放提示：</strong>右上角显示全局缩放级别</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="sync-section">
+            <h2 class="sync-title">📊 功能对比</h2>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>功能</th>
+                        <th>修改前（独立操作）</th>
+                        <th>修改后（同步操作）</th>
+                        <th>分析优势</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>拖动平移</strong></td>
+                        <td>每个通道独立拖动</td>
+                        <td>所有通道同步拖动</td>
+                        <td>便于对比同一时间段的多通道信号</td>
+                    </tr>
+                    <tr>
+                        <td><strong>滚轮缩放</strong></td>
+                        <td>每个通道独立缩放</td>
+                        <td>所有通道同步缩放</td>
+                        <td>保持时间轴一致，便于分析信号相关性</td>
+                    </tr>
+                    <tr>
+                        <td><strong>双击重置</strong></td>
+                        <td>单个通道重置</td>
+                        <td>所有通道同步重置</td>
+                        <td>快速回到统一的初始视图</td>
+                    </tr>
+                    <tr>
+                        <td><strong>滚动条</strong></td>
+                        <td>每个通道都有滚动条</td>
+                        <td>仅最后通道显示全局滚动条</td>
+                        <td>减少视觉干扰，统一位置指示</td>
+                    </tr>
+                    <tr>
+                        <td><strong>缩放提示</strong></td>
+                        <td>每个通道都有提示</td>
+                        <td>仅显示一个全局提示</td>
+                        <td>避免重复信息，界面更简洁</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="sync-section">
+            <h2 class="sync-title">🔧 技术实现</h2>
+            
+            <div class="sync-features">
+                <h3>✅ 核心技术改进：</h3>
+                <ul>
+                    <li><strong>全局状态管理：</strong>创建 syncState 对象管理所有通道的同步状态</li>
+                    <li><strong>事件统一处理：</strong>所有canvas共享同一套事件监听器</li>
+                    <li><strong>批量重绘机制：</strong>状态变化时同时重绘所有通道</li>
+                    <li><strong>智能UI优化：</strong>避免重复的视觉元素，提升用户体验</li>
+                    <li><strong>性能优化：</strong>减少重复计算，提高交互响应速度</li>
+                </ul>
+            </div>
+
+            <div class="code-block" style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin: 15px 0; font-family: monospace; font-size: 12px;">
+                <strong>核心代码结构：</strong><br><br>
+                // 创建全局同步状态管理器<br>
+                const syncState = {<br>
+                &nbsp;&nbsp;windowStartIndex: startIndex,<br>
+                &nbsp;&nbsp;windowSize: initialWindowSize,<br>
+                &nbsp;&nbsp;maxStartIndex: maxIndex,<br>
+                &nbsp;&nbsp;isDragging: false,<br>
+                &nbsp;&nbsp;canvases: [] // 所有通道的canvas和数据<br>
+                };<br><br>
+                
+                // 批量重绘所有通道<br>
+                const redrawAllChannels = () => {<br>
+                &nbsp;&nbsp;syncState.canvases.forEach(({canvas, channel}) => {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;drawEEGWaveform(canvas, channel, syncState);<br>
+                &nbsp;&nbsp;});<br>
+                };
+            </div>
+        </div>
+
+        <div class="sync-section">
+            <h2 class="sync-title">🧪 测试验证步骤</h2>
+            
+            <div class="interaction-hints">
+                <strong>💡 请按以下步骤验证同步功能：</strong>
+                <ol>
+                    <li><strong>启动应用：</strong>
+                        <ul>
+                            <li>后端：<code>cd backend && mvn spring-boot:run</code></li>
+                            <li>前端：<code>./start-frontend.sh</code></li>
+                            <li>访问：<a href="http://localhost:3000" target="_blank">http://localhost:3000</a></li>
+                        </ul>
+                    </li>
+                    <li><strong>上传EDF文件：</strong>
+                        <ul>
+                            <li>选择包含多个通道的EDF文件</li>
+                            <li>等待文件解析完成</li>
+                            <li>观察多个通道的波形图显示</li>
+                        </ul>
+                    </li>
+                    <li><strong>测试拖动同步：</strong>
+                        <ul>
+                            <li>在任意通道上拖动鼠标</li>
+                            <li>观察所有通道是否同步移动</li>
+                            <li>检查时间轴是否保持一致</li>
+                        </ul>
+                    </li>
+                    <li><strong>测试缩放同步：</strong>
+                        <ul>
+                            <li>在任意通道上滚动鼠标滚轮</li>
+                            <li>观察所有通道是否同步缩放</li>
+                            <li>检查缩放中心点是否正确</li>
+                        </ul>
+                    </li>
+                    <li><strong>测试重置同步：</strong>
+                        <ul>
+                            <li>双击任意通道</li>
+                            <li>观察所有通道是否同步重置</li>
+                            <li>检查是否回到初始最小视图</li>
+                        </ul>
+                    </li>
+                    <li><strong>验证UI优化：</strong>
+                        <ul>
+                            <li>确认只有最后一个通道显示滚动条</li>
+                            <li>确认只有一个缩放级别提示</li>
+                            <li>检查交互提示是否更新</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="sync-section">
+            <h2 class="sync-title">📈 用户体验提升</h2>
+            
+            <div class="sync-features">
+                <h3>✅ 分析效率提升：</h3>
+                <ul>
+                    <li><strong>时间对齐：</strong>所有通道显示相同时间段，便于对比分析</li>
+                    <li><strong>操作简化：</strong>只需在一个通道操作，所有通道同步响应</li>
+                    <li><strong>视觉统一：</strong>减少重复的UI元素，界面更简洁</li>
+                    <li><strong>分析便利：</strong>便于发现不同通道间的信号相关性和异常</li>
+                    <li><strong>专业体验：</strong>符合医疗设备和专业EEG分析软件的操作习惯</li>
+                </ul>
+            </div>
+
+            <div class="demo-video">
+                <h4>🎬 演示场景</h4>
+                <p>在癫痫发作检测中，医生需要同时观察多个脑区的EEG信号：</p>
+                <ul style="text-align: left; display: inline-block;">
+                    <li>拖动到疑似发作时间点，所有通道同步显示该时段</li>
+                    <li>放大查看细节波形，所有通道保持相同的时间分辨率</li>
+                    <li>对比不同通道的信号特征，发现异常传播路径</li>
+                    <li>快速重置到初始视图，开始新的分析周期</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🔄 通道同步功能验证页面已加载');
+            console.log('同步功能特性：');
+            console.log('1. 全局状态管理 - 所有通道共享时间窗口');
+            console.log('2. 统一事件处理 - 任意通道操作影响全部');
+            console.log('3. 批量重绘机制 - 高效的视图更新');
+            console.log('4. UI优化 - 减少重复元素');
+            console.log('5. 专业体验 - 符合医疗分析习惯');
+        });
+    </script>
+</body>
+</html> 
